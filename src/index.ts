@@ -38,7 +38,8 @@ Bun.serve({
 			await createVisit(request, requestUrl, redirect, server),
 		);
 
-		const skip = requestUrl.searchParams.has("skip") &&
+		const skip =
+			requestUrl.searchParams.has("skip") &&
 			(requestUrl.searchParams.get("skip") ?? "true") !== "false";
 
 		if (redirect.delay_s === 0 || skip) {
@@ -91,7 +92,10 @@ async function createVisit(
 		user_agent: userAgent,
 		country: headers.get("cf-ipcountry") ?? headers.get("x-vercel-ip-country"),
 		city: headers.get("cf-ipcity") ?? headers.get("x-vercel-ip-city"),
-		region: headers.get("cf-region") ?? headers.get("cf-region-code") ?? headers.get("x-vercel-ip-country-region"),
+		region:
+			headers.get("cf-region") ??
+			headers.get("cf-region-code") ??
+			headers.get("x-vercel-ip-country-region"),
 		utm_source: requestUrl.searchParams.get("utm_source"),
 		utm_medium: requestUrl.searchParams.get("utm_medium"),
 		utm_campaign: requestUrl.searchParams.get("utm_campaign"),
