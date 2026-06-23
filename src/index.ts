@@ -38,7 +38,10 @@ Bun.serve({
 			await createVisit(request, requestUrl, redirect, server),
 		);
 
-		if (redirect.delay_s === 0) {
+		const skip = requestUrl.searchParams.has("skip") &&
+			(requestUrl.searchParams.get("skip") ?? "true") !== "false";
+
+		if (redirect.delay_s === 0 || skip) {
 			return Response.redirect(redirect.url, 302);
 		}
 
@@ -87,8 +90,8 @@ async function createVisit(
 		ip_hash: ip ? await sha256Hex(ip) : null,
 		user_agent: userAgent,
 		country: headers.get("cf-ipcountry") ?? headers.get("x-vercel-ip-country"),
-		city: headers.get("x-vercel-ip-city"),
-		region: headers.get("x-vercel-ip-country-region"),
+		city: headers.get("cf-ipcity") ?? headers.get("x-vercel-ip-city"),
+		region: headers.get("cf-region") ?? headers.get("cf-region-code") ?? headers.get("x-vercel-ip-country-region"),
 		utm_source: requestUrl.searchParams.get("utm_source"),
 		utm_medium: requestUrl.searchParams.get("utm_medium"),
 		utm_campaign: requestUrl.searchParams.get("utm_campaign"),
@@ -102,6 +105,10 @@ function getClientIp(
 	request: Request,
 	server: Bun.Server<unknown>,
 ): string | null {
+	// cf-connecting-ip is the most reliable when behind a Cloudflare tunnel
+	const cfIp = request.headers.get("cf-connecting-ip")?.trim();
+	if (cfIp) return cfIp;
+
 	const forwardedFor = request.headers
 		.get("x-forwarded-for")
 		?.split(",")[0]
