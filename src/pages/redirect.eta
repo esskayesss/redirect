@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirecting to <%= it.redirect.label %>...</title>
+    <link rel="icon" type="image/x-icon" href="https://www.esskayesss.dev/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --color-background: #060914;
+        --color-foreground: #9A9CA6;
+        --color-primary: #DEDFE5;
+
+        --color-borders:#64666E;
+        --color-links: #C6F8F9;
+      }
+
+      a {
+        @apply text-links hover:underline;
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let countdownVal = <%= it.redirect.delay_s %>;
+        const countdown = document.getElementById("countdown");
+        const redirectLink = document.getElementById("redirect-link");
+
+        countdown.textContent = String(countdownVal);
+
+        const updateCounter = setInterval(() => {
+          countdownVal -= 1;
+          countdown.textContent = String(Math.max(countdownVal, 0));
+
+          if (countdownVal <= 0) {
+            clearInterval(updateCounter);
+            redirectLink.click();
+          }
+        }, 1000);
+      });
+    </script>
+  </head>
+  <body class="max-w-6xl mx-auto flex flex-col items-start gap-2.5 bg-background p-5 text-foreground space-around h-dvh">
+    <%~ include("./assets/branding.svg") %>
+    <div class="flex flex-col my-10 h-full w-full">
+      <div class="flex flex-col gap-2.5 h-1/2">
+        <div class="flex items-center gap-2.5">
+          <object type="image/svg+xml" data="https://api.iconify.design/svg-spinners:180-ring-with-bg.svg?color=%23bdbfcb"></object>
+          <p>Redirecting you to <span id="target" class="text-primary"><%= it.redirect.label %></span> in <span id="countdown"><%= it.redirect.delay_s %></span> seconds...</p>
+        </div>
+        <p class="text-sm"><a href="<%= it.redirect.url %>" id="redirect-link">Click here</a> if you are not redirected automatically</p>
+      </div>
+    </div>
+  </body>
+</html>

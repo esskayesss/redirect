@@ -1,0 +1,19 @@
+{
+  "name": "redirect",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "migrate": "bun scripts/push-migrations.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "eta": "^4.6.0"
+  }
+}

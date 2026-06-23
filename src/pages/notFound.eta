@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirect not found</title>
+    <link rel="icon" type="image/x-icon" href="https://www.esskayesss.dev/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --color-background: #060914;
+        --color-foreground: #9A9CA6;
+        --color-primary: #DEDFE5;
+        --color-borders:#64666E;
+        --color-links: #C6F8F9;
+      }
+
+      a {
+        @apply text-links hover:underline;
+      }
+    </style>
+  </head>
+  <body class="max-w-6xl mx-auto flex flex-col items-start gap-2.5 bg-background p-5 text-foreground space-around h-dvh">
+    <%~ include("./assets/branding.svg") %>
+    <div class="flex flex-col my-10 h-full w-full">
+      <div class="flex flex-col gap-2.5 h-1/2">
+        <h1 class="text-primary text-xl">Redirect not found</h1>
+        <p>No active redirect exists for <span class="text-primary"><%= it.slug %></span>.</p>
+        <p class="text-sm"><a href="https://www.esskayesss.dev">Go to esskayesss.dev</a></p>
+      </div>
+    </div>
+  </body>
+</html>
