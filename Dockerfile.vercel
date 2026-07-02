@@ -1,0 +1,21 @@
+# Vercel container image build (Dockerfile.vercel).
+# Vercel detects this at project root, builds it, pushes to Vercel Container
+# Registry, and serves it from a Vercel Function. Traffic is routed to $PORT.
+FROM oven/bun:1-alpine AS deps
+WORKDIR /app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
+
+FROM oven/bun:1-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+# Vercel routes traffic to port 80 by default; PORT tells it which port to hit.
+ENV PORT=3000
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json bun.lock tsconfig.json ./
+COPY src ./src
+COPY migrations ./migrations
+
+EXPOSE 3000
+CMD ["bun", "run", "src/index.ts"]
